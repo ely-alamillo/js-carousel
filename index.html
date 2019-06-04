@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Carousel</title>
+
+    <style>
+      .carousel-wrapper {
+        height: 600px;
+        width: 600px;
+        position: relative;
+        overflow: hidden;
+        margin: 0 auto;
+      }
+
+      .button-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: absolute;
+      }
+
+      .carousel {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        width: 100%;
+        display: flex;
+        position: absolute;
+        left: 0;
+        transition: all 1s ease;
+      }
+
+      .card {
+        background: black;
+        min-width: 600px;
+        height: 600px;
+        margin-right: 1rem;
+        display: inline-block;
+      }
+
+      .button {
+        color: #ffffff;
+        background-color: rgba(100, 100, 100, 0.9);
+        padding: 1em;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="carousel-wrapper">
+      <ul class="carousel" data-target="carousel">
+        <li class="card" data-target="card"></li>
+        <li class="card" data-target="card"></li>
+        <li class="card" data-target="card"></li>
+        <li class="card" data-target="card"></li>
+        <li class="card" data-target="card"></li>
+        <li class="card" data-target="card"></li>
+      </ul>
+      <div class="button-wrapper">
+        <div class="button" data-action="slideLeft">&#60;</div>
+        <div class="button" data-action="slideRight">&#62;</div>
+      </div>
+    </div>
+
+    <script>
+      const carousel = document.querySelector("[data-target='carousel']");
+      const card = carousel.querySelector("[data-target='card']");
+      const leftButton = document.querySelector("[data-action='slideLeft']");
+      const rightButton = document.querySelector("[data-action='slideRight']");
+
+      // determine wrapper width
+      const carouselWidth = carousel.offsetWidth;
+      const cardStyle = card.currentStyle || window.getComputedStyle(card);
+      const cardMarginRight = Number(cardStyle.marginRight.match(/\d+/g)[0]);
+
+      const cardCount = carousel.querySelectorAll("[data-target='card']")
+        .length;
+
+      let offset = 0;
+      const maxX = -(
+        cardCount * carouselWidth +
+        cardMarginRight * cardCount -
+        carouselWidth -
+        cardMarginRight
+      );
+
+      leftButton.addEventListener('click', () => {
+        if (offset !== 0) {
+          offset += carouselWidth + cardMarginRight;
+          carousel.style.transform = `translateX(${offset}px)`;
+        }
+      });
+
+      rightButton.addEventListener('click', () => {
+        if (offset !== maxX) {
+          offset -= carouselWidth + cardMarginRight;
+          carousel.style.transform = `translateX(${offset}px)`;
+        }
+      });
+    </script>
+  </body>
+</html>
